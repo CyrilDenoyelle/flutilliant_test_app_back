@@ -45,3 +45,6 @@ app.listen(port, async () => {
     });
     console.log(`Server connected to db`);
 });
+
+
+module.exports = app;
