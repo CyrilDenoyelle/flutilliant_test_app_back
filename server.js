@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require("cookie-parser");
+const bodyParser = require('body-parser');
 
 const routes = require("./api/routes")
 
@@ -10,12 +12,14 @@ require('dotenv').config({
 
 const {
     PORT,
+    HOST,
     CORSWHITELIST,
     MONGO_USERNAME,
     MONGO_PASSWORD
 } = process.env;
 
 const port = PORT || 8080;
+const host = HOST || 'localhost'
 const app = express();
 
 const corsOptions = {
@@ -28,6 +32,11 @@ const corsOptions = {
     },
 };
 app.use(cors(corsOptions));
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(express.json());
 
