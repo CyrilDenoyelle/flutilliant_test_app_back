@@ -5,7 +5,7 @@ The commercial director of the company has an interface allowing him to visualiz
 
 ## Install
 
-    $ npm install
+    npm install
 
 ## Configure app
 
@@ -20,6 +20,26 @@ then edit it with your settings. You will need:
 - SECRET_JWT_CODE is the encryption key for jwt toekns
 - ACCESS_TOKEN_EXPIRESIN is a duration in second (3600 is one hour)
 
-## Running the project
+## Running development server
 
-    $ npm run dev
+If you use mongodb in local
+
+    mongod --dbpath "C:\Users\{UserName}\Path\to\Mongodb\data\db"
+
+Set NODE_ENV to dev
+
+    $Env:NODE_ENV="dev"
+
+Run the dev script
+
+    npm run dev
+
+## Running the tests
+
+Same if you have mongodb in local (don't forget to change the port to anithing else than 27017)
+
+    mongod --port {TEST_DB_PORT} --dbpath "C:\Users\{UserName}\Path\to\Mongodb\data\testDb"
+
+Run the test script (don't forget to stop the dev server if its on the same port)
+
+    npm run test
