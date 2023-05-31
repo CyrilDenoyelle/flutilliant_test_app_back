@@ -1,13 +1,14 @@
 process.env.NODE_ENV = 'test';
 
 const mongoose = require("mongoose");
-const User = require('../api/models/userModel');
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server');
-const should = chai.should();
+const cookie = require('cookie');
 
+const User = require('../api/models/userModel');
+const server = require('../server');
+
+const should = chai.should();
 
 chai.use(chaiHttp);
 
@@ -45,6 +46,10 @@ describe('Users tests', () => {
                     res.body.should.have.deep.property('user._id');
                     res.body.should.have.deep.property('user.email');
                     res.body.should.have.a.property('xsrfToken');
+
+                    const cookies = cookie.parse(res.headers['set-cookie'][0]);
+                    cookies['access_token'].should.exist;
+
                     done();
                 });
         });

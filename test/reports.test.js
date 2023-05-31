@@ -9,7 +9,6 @@ const Report = require('../api/models/reportModel');
 const server = require('../server');
 
 const should = chai.should();
-const expect = chai.expect
 
 chai.use(chaiHttp);
 
