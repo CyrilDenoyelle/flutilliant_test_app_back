@@ -31,9 +31,6 @@ module.exports = async ({ email, password }, res) => {
         } = process.env;
 
         res.cookie('access_token', token, {
-            httpOnly: process.env.NODE_ENV === 'production' ? true : null,
-            secure: process.env.NODE_ENV === 'production' ? true : null,
-            maxAge: +process.env.ACCESS_TOKEN_EXPIRESIN * 1000 // milliseconds
             SameSite: NODE_ENV === 'production' ? 'Strict' : 'Lax',
             httpOnly: NODE_ENV === 'production' ? true : false,
             secure: NODE_ENV === 'production' ? true : false,
