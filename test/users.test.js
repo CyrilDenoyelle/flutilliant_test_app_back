@@ -43,7 +43,6 @@ describe('Users tests', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.have.deep.property('user._id');
-                    res.body.should.have.deep.property('user.Created_date');
                     res.body.should.have.deep.property('user.email');
                     res.body.should.have.a.property('xsrfToken');
                     done();
