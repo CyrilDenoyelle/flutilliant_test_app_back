@@ -16,7 +16,7 @@ router.use(userAuth)
 router.route("/create").post(errorHandler(create));
 
 // find all reports for logged user (director will see all reports, user will see only his reports)
-router.route("/find").get(errorHandler(findAll));
+router.route("/").get(errorHandler(findAll));
 
 
 module.exports = router;
