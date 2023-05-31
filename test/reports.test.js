@@ -24,35 +24,35 @@ describe('Reports tests', () => {
     });
 
     describe('create report and check in db', () => {
+
+        const agent = chai.request.agent(server)
+
+        const credentials = {
+            email: 'truktestsendreport@gmail.com',
+            password: 'truktest123',
+        }
+
+        const report = {
+            customer: {
+                address: 'test address',
+                name: 'test name',
+                contact: 'test contact',
+            },
+            visitDate: '2020-01-01',
+            reportBody: 'test report body',
+            orderedItems: 1,
+            revenue: 1,
+            nextVisitDate: '2020-01-01',
+            nextVisitItems: 1,
+            nextVisitRevenue: 1,
+        }
+
         it('should create a new report', async (done) => {
 
-            const agent = chai.request.agent(server)
-
-            const credentials = {
-                email: 'truktestsendreport@gmail.com',
-                password: 'truktest123',
-            }
-
-            const report = {
-                customer: {
-                    address: 'test address',
-                    name: 'test name',
-                    contact: 'test contact',
-                },
-                visitDate: '2020-01-01',
-                reportBody: 'test report body',
-                orderedItems: 1,
-                revenue: 1,
-                nextVisitDate: '2020-01-01',
-                nextVisitItems: 1,
-                nextVisitRevenue: 1,
-            }
 
             await agent.post('/users/signup')
                 .send(credentials);
 
-            let token = ''
-            let access_token = ''
             await agent.post('/users/login')
                 .send(credentials)
                 .then((res) => {
@@ -80,6 +80,37 @@ describe('Reports tests', () => {
             createdReport.should.have.property('nextVisitItems', report.nextVisitItems);
             createdReport.should.have.property('nextVisitRevenue', report.nextVisitRevenue);
 
+            done();
+        });
+
+        it('should list all reports for the connected user', async (done) => {
+
+            const report = {
+                customer: {
+                    address: 'test address',
+                    name: 'test name',
+                    contact: 'test contact',
+                },
+                visitDate: '2020-01-02',
+                reportBody: 'test report body 2',
+                orderedItems: 1,
+                revenue: 2,
+                nextVisitDate: '2020-01-02',
+                nextVisitItems: 1,
+                nextVisitRevenue: 2,
+            }
+            // create a second report
+            await agent.post('/reports/create')
+                .set('x-xsrf-token', JSON.stringify(token))
+                .set('Cookie', `access_token=${access_token}`)
+                .send(report)
+
+
+            const res = await agent.get('/reports/find')
+                .set('x-xsrf-token', JSON.stringify(token))
+                .set('Cookie', `access_token=${access_token}`)
+
+            res.should.have.status(200);
             done();
         });
 
