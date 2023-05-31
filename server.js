@@ -55,7 +55,7 @@ app.listen(port, host, async () => {
 
     // mongoose instance
     mongoose.Promise = global.Promise;
-    await mongoose.connect(`mongodb://localhost:27017`, {
+    await mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`, {
         user: MONGO_USERNAME,
         pass: MONGO_PASSWORD,
         dbName: 'commercial_reports'
