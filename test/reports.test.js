@@ -11,9 +11,31 @@ const server = require('../server');
 chai.should();
 chai.use(chaiHttp);
 
-describe('Reports tests', () => {
+describe('Reports tests', async () => {
+    const agent = chai.request.agent(server);
+
+    const credentials = {
+        email: 'truktestsendreport@gmail.com',
+        password: 'truktest123',
+    };
+
+    let xsrfToken = null;
+    let accessToken = null;
+
     // after all befor all tests we empty the test database
     before(async (done) => {
+        // logging in the agent
+        await agent.post('/users/signup')
+            .send(credentials);
+
+        await agent.post('/users/login')
+            .send(credentials)
+            .then((res) => {
+                xsrfToken = res.body.xsrfToken;
+                const cookies = cookie.parse(res.headers['set-cookie'][0]);
+                accessToken = cookies.access_token;
+            });
+
         await Report.deleteMany({});
         done();
     });
@@ -22,44 +44,26 @@ describe('Reports tests', () => {
         done();
     });
 
-    describe('create report and check in db', () => {
-        const agent = chai.request.agent(server);
-
-        const credentials = {
-            email: 'truktestsendreport@gmail.com',
-            password: 'truktest123',
-        };
-
-        const report = {
-            customer: {
-                address: 'test address',
-                name: 'test name',
-                contact: 'test contact',
-            },
-            visitDate: '2020-01-01',
-            reportBody: 'test report body',
-            orderedItems: 1,
-            revenue: 1,
-            nextVisitDate: '2020-01-01',
-            nextVisitItems: 1,
-            nextVisitRevenue: 1,
-        };
-
+    describe('reports', () => {
         it('should create a new report', async (done) => {
-            await agent.post('/users/signup')
-                .send(credentials);
+            const report = {
+                customer: {
+                    address: 'test address',
+                    name: 'test name',
+                    contact: 'test contact',
+                },
+                visitDate: '2020-01-01',
+                reportBody: 'test report body',
+                orderedItems: 1,
+                revenue: 1,
+                nextVisitDate: '2020-01-01',
+                nextVisitItems: 1,
+                nextVisitRevenue: 1,
+            };
 
-            await agent.post('/users/login')
-                .send(credentials)
-                .then((res) => {
-                    token = res.body.xsrfToken;
-                    const cookies = cookie.parse(res.headers['set-cookie'][0]);
-                    access_token = cookies.access_token;
-                });
-
-            const res = await agent.post('/reports/create')
-                .set('x-xsrf-token', JSON.stringify(token))
-                .set('Cookie', `access_token=${access_token}`)
+            const res = await agent.post('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`)
                 .send(report);
 
             res.should.have.status(200);
@@ -78,6 +82,7 @@ describe('Reports tests', () => {
             done();
         });
 
+        let newReportId = null;
         it('should list all reports for the connected user', async (done) => {
             const report = {
                 customer: {
@@ -94,14 +99,30 @@ describe('Reports tests', () => {
                 nextVisitRevenue: 2,
             };
             // create a second report
-            await agent.post('/reports/create')
-                .set('x-xsrf-token', JSON.stringify(token))
-                .set('Cookie', `access_token=${access_token}`)
+            await agent.post('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`)
                 .send(report);
 
-            const res = await agent.get('/reports/find')
-                .set('x-xsrf-token', JSON.stringify(token))
-                .set('Cookie', `access_token=${access_token}`);
+            const res = await agent.get('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`);
+
+            newReportId = res.body.data.reports[0]._id;
+            res.should.have.status(200);
+            done();
+        });
+
+        it('should update report', async (done) => {
+            // create a second report
+            await agent.put('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`)
+                .send(newReportId, { customerName: 'test name updated' });
+
+            const res = await agent.get('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`);
 
             res.should.have.status(200);
             done();

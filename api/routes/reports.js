@@ -8,14 +8,18 @@ const userAuth = require('../middlewares/userAuth');
 const {
     create,
     findAll,
+    update,
 } = require('../controllers/reportController');
 
 router.use(userAuth);
 
 // create report
-router.route('/create').post(errorHandler(create));
+router.route('/').post(errorHandler(create));
 
 // find all reports for logged user (director will see all reports, user will see only his reports)
 router.route('/').get(errorHandler(findAll));
+
+// find all reports for logged user (director will see all reports, user will see only his reports)
+router.route('/').put(errorHandler(update));
 
 module.exports = router;
