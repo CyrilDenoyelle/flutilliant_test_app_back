@@ -1,5 +1,3 @@
-'use strict';
-
 const Report = require('../../models/reportModel');
 
 module.exports = async ({
@@ -31,8 +29,7 @@ module.exports = async ({
 
         return { createdReport };
     } catch (error) {
-        console.error(`[service] [${__dirname}]`, error)
-        throw error
+        console.error(`[service] [${__dirname}]`, error);
+        throw error;
     }
-
 };

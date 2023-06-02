@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const cookie = require('cookie');
@@ -16,21 +16,20 @@ describe('Reports tests', () => {
     // after all befor all tests we empty the test database
     before(async (done) => {
         await Report.deleteMany({});
-        done()
+        done();
     });
     after(async (done) => {
         await Report.deleteMany({});
-        done()
+        done();
     });
 
     describe('create report and check in db', () => {
-
-        const agent = chai.request.agent(server)
+        const agent = chai.request.agent(server);
 
         const credentials = {
             email: 'truktestsendreport@gmail.com',
             password: 'truktest123',
-        }
+        };
 
         const report = {
             customer: {
@@ -45,11 +44,9 @@ describe('Reports tests', () => {
             nextVisitDate: '2020-01-01',
             nextVisitItems: 1,
             nextVisitRevenue: 1,
-        }
+        };
 
         it('should create a new report', async (done) => {
-
-
             await agent.post('/users/signup')
                 .send(credentials);
 
@@ -58,14 +55,13 @@ describe('Reports tests', () => {
                 .then((res) => {
                     token = res.body.xsrfToken;
                     const cookies = cookie.parse(res.headers['set-cookie'][0]);
-                    access_token = cookies['access_token'];
-
+                    access_token = cookies.access_token;
                 });
 
             const res = await agent.post('/reports/create')
                 .set('x-xsrf-token', JSON.stringify(token))
                 .set('Cookie', `access_token=${access_token}`)
-                .send(report)
+                .send(report);
 
             res.should.have.status(200);
             const { createdReport } = res.body.data;
@@ -84,7 +80,6 @@ describe('Reports tests', () => {
         });
 
         it('should list all reports for the connected user', async (done) => {
-
             const report = {
                 customer: {
                     address: 'test address',
@@ -98,22 +93,19 @@ describe('Reports tests', () => {
                 nextVisitDate: '2020-01-02',
                 nextVisitItems: 1,
                 nextVisitRevenue: 2,
-            }
+            };
             // create a second report
             await agent.post('/reports/create')
                 .set('x-xsrf-token', JSON.stringify(token))
                 .set('Cookie', `access_token=${access_token}`)
-                .send(report)
-
+                .send(report);
 
             const res = await agent.get('/reports/find')
                 .set('x-xsrf-token', JSON.stringify(token))
-                .set('Cookie', `access_token=${access_token}`)
+                .set('Cookie', `access_token=${access_token}`);
 
             res.should.have.status(200);
             done();
         });
-
     });
-
 });

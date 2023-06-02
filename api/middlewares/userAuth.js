@@ -1,21 +1,21 @@
-const checkTokenValidity = require('../services/users/checkTokenValidity')
+const checkTokenValidity = require('../services/users/checkTokenValidity');
 
 module.exports = async (req, res, next) => {
     try {
-        const { cookies, headers } = req
+        const { cookies, headers } = req;
 
-        const user = await checkTokenValidity({ cookies, headers })
+        const user = await checkTokenValidity({ cookies, headers });
 
         if (!user) {
-            res.status(401).send('not logged in')
-            return
+            res.status(401).send('not logged in');
+            return;
         }
 
-        req.user = user
+        req.user = user;
 
-        next()
+        next();
     } catch (error) {
-        console.error(`[middleware] [${__dirname}]`, error)
-        res.status(401).send('not logged in')
+        console.error(`[middleware] [${__dirname}]`, error);
+        res.status(401).send('not logged in');
     }
-}
+};

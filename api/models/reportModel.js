@@ -1,4 +1,4 @@
-'use strict'; const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const reportSchema = new mongoose.Schema({
     customerAddress: {
@@ -47,7 +47,7 @@ const reportSchema = new mongoose.Schema({
         required: true,
     },
 }, {
-    collection: 'reports'
+    collection: 'reports',
 }, {
     timestamps: true,
 });

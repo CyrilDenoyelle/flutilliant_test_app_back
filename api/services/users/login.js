@@ -1,5 +1,3 @@
-'use strict';
-
 const jsonwebtoken = require('jsonwebtoken');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
@@ -8,7 +6,6 @@ const findUser = require('./find');
 
 module.exports = async ({ email, password }, res) => {
     try {
-
         const user = await findUser({ email });
 
         if (!user) throw new Error('nope');
@@ -21,25 +18,25 @@ module.exports = async ({ email, password }, res) => {
             process.env.SECRET_JWT_CODE,
             {
                 expiresIn: +process.env.ACCESS_TOKEN_EXPIRESIN, // seconds
-                subject: user._id.toString()
-            }
+                subject: user._id.toString(),
+            },
         );
 
         const {
             NODE_ENV,
-            ACCESS_TOKEN_EXPIRESIN
+            ACCESS_TOKEN_EXPIRESIN,
         } = process.env;
 
         res.cookie('access_token', token, {
             SameSite: NODE_ENV === 'production' ? 'Strict' : 'Lax',
-            httpOnly: NODE_ENV === 'production' ? true : false,
-            secure: NODE_ENV === 'production' ? true : false,
-            maxAge: +ACCESS_TOKEN_EXPIRESIN * 1000 // milliseconds
+            httpOnly: NODE_ENV === 'production',
+            secure: NODE_ENV === 'production',
+            maxAge: +ACCESS_TOKEN_EXPIRESIN * 1000, // milliseconds
         });
 
-        return { resWithCookies: res, xsrfToken, user }
+        return { resWithCookies: res, xsrfToken, user };
     } catch (error) {
-        console.error(`[service] [${__dirname}]`, error)
-        throw error
+        console.error(`[service] [${__dirname}]`, error);
+        throw error;
     }
 };

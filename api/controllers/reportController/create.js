@@ -1,6 +1,4 @@
-'use strict';
-
-const createReport = require('../../services/reports/create')
+const createReport = require('../../services/reports/create');
 
 module.exports = async (req, res) => {
     try {
@@ -10,13 +8,11 @@ module.exports = async (req, res) => {
             success: true,
             message: 'Report created successfully',
             data: {
-                createdReport
+                createdReport,
             },
         });
-
     } catch (error) {
-        console.error(`[controllers] [${__dirname}]`, error)
-        throw error
+        console.error(`[controllers] [${__dirname}]`, error);
+        throw error;
     }
-
 };

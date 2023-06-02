@@ -1,17 +1,15 @@
 module.exports = {
-  env: {
-    commonjs: true,
-    es2021: true,
-    node: true,
-  },
-  extends: 'airbnb-base',
-  overrides: [
-
-  ],
-  parserOptions: {
-    ecmaVersion: 'latest',
-  },
-  rules: {
-  },
-  indent: ['error', 2],
+    env: {
+        commonjs: true,
+        es2021: true,
+        node: true,
+    },
+    extends: 'airbnb-base',
+    parserOptions: {
+        ecmaVersion: 'latest',
+    },
+    rules: {
+        indent: ['error', 4],
+        'linebreak-style': ['error', 'windows'],
+    },
 };

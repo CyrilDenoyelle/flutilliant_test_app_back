@@ -1,6 +1,4 @@
-'use strict';
-
-const findAll = require('../../services/reports/findAll')
+const findAll = require('../../services/reports/findAll');
 
 module.exports = async (req, res) => {
     try {
@@ -10,13 +8,11 @@ module.exports = async (req, res) => {
             success: true,
             message: 'Reports fetched successfully',
             data: {
-                reports
+                reports,
             },
         });
-
     } catch (error) {
-        console.error(`[controllers] [${__dirname}]`, error)
-        throw error
+        console.error(`[controllers] [${__dirname}]`, error);
+        throw error;
     }
-
 };

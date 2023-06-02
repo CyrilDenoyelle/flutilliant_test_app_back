@@ -1,5 +1,3 @@
-'use strict';
-
 const userLogin = require('../../services/users/login');
 
 module.exports = async (req, res) => {
@@ -11,9 +9,8 @@ module.exports = async (req, res) => {
             success: true,
             accessTokenExpiresIn: +process.env.ACCESS_TOKEN_EXPIRESIN * 1000,
             xsrfToken,
-            user
+            user,
         });
-
     } catch (error) {
         console.error(`[controllers] [${__dirname}]`, error);
         throw error;

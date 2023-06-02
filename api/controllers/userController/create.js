@@ -1,19 +1,15 @@
-'use strict';
-
-const createUser = require('../../services/users/create')
+const createUser = require('../../services/users/create');
 
 module.exports = async (req, res) => {
     try {
         const { email, password } = req.body;
-        await createUser({ email, password })
+        await createUser({ email, password });
 
         res.status(200).json({
-            success: true
+            success: true,
         });
-
     } catch (error) {
-        console.error(`[controllers] [${__dirname}]`, error)
-        throw error
+        console.error(`[controllers] [${__dirname}]`, error);
+        throw error;
     }
-
 };
