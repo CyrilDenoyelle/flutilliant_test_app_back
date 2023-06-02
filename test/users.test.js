@@ -8,8 +8,7 @@ const cookie = require('cookie');
 const User = require('../api/models/userModel');
 const server = require('../server');
 
-const should = chai.should();
-
+chai.should();
 chai.use(chaiHttp);
 
 describe('Users tests', () => {
@@ -48,7 +47,7 @@ describe('Users tests', () => {
                     res.body.should.have.a.property('xsrfToken');
 
                     const cookies = cookie.parse(res.headers['set-cookie'][0]);
-                    cookies.access_token.should.exist;
+                    cookies.access_token.should.be.a('string');
 
                     done();
                 });

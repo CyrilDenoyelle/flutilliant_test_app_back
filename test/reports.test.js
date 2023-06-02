@@ -8,8 +8,7 @@ const cookie = require('cookie');
 const Report = require('../api/models/reportModel');
 const server = require('../server');
 
-const should = chai.should();
-
+chai.should();
 chai.use(chaiHttp);
 
 describe('Reports tests', () => {
