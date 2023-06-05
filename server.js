@@ -17,6 +17,9 @@ const {
     CORSWHITELIST,
     MONGO_USERNAME,
     MONGO_PASSWORD,
+    MONGO_HOST,
+    MONGO_PORT,
+    MONGO_DB_NAME,
 } = process.env;
 
 const port = PORT || 8080;
@@ -54,10 +57,10 @@ app.listen(port, host, async () => {
 
     // mongoose instance
     mongoose.Promise = global.Promise;
-    await mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`, {
+    await mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}`, {
         user: MONGO_USERNAME,
         pass: MONGO_PASSWORD,
-        dbName: 'commercial_reports',
+        dbName: MONGO_DB_NAME,
     });
     console.log('Server connected to db');
 });

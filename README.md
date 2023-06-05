@@ -22,9 +22,11 @@ then edit it with your settings. You will need:
 
 ## Running development server
 
-If you use mongodb in local
+If you use mongodb in local:
 
-    mongod --dbpath "C:\Users\{UserName}\Path\to\Mongodb\data\db"
+    mongod [--auth] --dbpath "C:\Users\{UserName}\Path\to\Mongodb\data\db"
+
+(with --auth only if you've allready set up admin and users in mongodb)
 
 Set NODE_ENV to dev
 
@@ -43,3 +45,7 @@ Same if you have mongodb in local (don't forget to change the port to anithing e
 Run the test script (don't forget to stop the dev server if its on the same port)
 
     npm run test
+
+## add admin to mongodb
+
+https://www.mongodb.com/docs/v2.6/tutorial/add-user-administrator/
