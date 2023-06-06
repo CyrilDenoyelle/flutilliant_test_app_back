@@ -2,7 +2,9 @@ const Report = require('../../models/reportModel');
 
 module.exports = async (user) => {
     try {
-        const reports = await Report.find({ commercialId: user.id }).exec();
+        const reports = user.role === 'direct'
+            ? await Report.find().exec()
+            : await Report.find({ commercialId: user.id }).exec();
 
         if (!reports) throw new Error('Reports not found');
 

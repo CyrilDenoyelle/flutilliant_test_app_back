@@ -14,6 +14,11 @@ const UserSchema = new Schema({
         type: String,
         required: 'user need a password',
     },
+    role: {
+        type: String,
+        default: 'commercial',
+        required: 'user need a role',
+    },
 }, {
     collection: 'users',
 }, {
