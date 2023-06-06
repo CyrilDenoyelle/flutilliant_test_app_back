@@ -19,7 +19,8 @@ router.route('/').post(errorHandler(create));
 // find all reports for logged user (director will see all reports, user will see only his reports)
 router.route('/').get(errorHandler(findAll));
 
-// find all reports for logged user (director will see all reports, user will see only his reports)
+// update a report for logged user
+// (director will be able to update any reports, user only his own reports)
 router.route('/').put(errorHandler(update));
 
 module.exports = router;
