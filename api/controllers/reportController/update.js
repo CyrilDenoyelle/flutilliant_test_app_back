@@ -3,6 +3,7 @@ const update = require('../../services/reports/update');
 module.exports = async (req, res) => {
     try {
         await update(
+            req.user,
             req.body.reportId,
             req.body.update,
         );

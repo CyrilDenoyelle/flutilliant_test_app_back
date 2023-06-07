@@ -4,7 +4,7 @@ module.exports = async (user, reportId) => {
     try {
         const report = await Report.findOneAndUpdate(
             {
-                commercialId: user.id,
+                ...user.role !== 'direct' && { commercialId: user.id },
                 _id: reportId,
             },
             { isDeleted: true },
