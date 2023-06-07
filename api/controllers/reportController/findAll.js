@@ -7,9 +7,7 @@ module.exports = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Reports fetched successfully',
-            data: {
-                reports,
-            },
+            reports,
         });
     } catch (error) {
         console.error(`[controllers] [${__dirname}]`, error);
