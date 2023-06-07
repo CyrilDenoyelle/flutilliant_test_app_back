@@ -108,23 +108,40 @@ describe('Reports tests', async () => {
                 .set('x-xsrf-token', JSON.stringify(xsrfToken))
                 .set('Cookie', `access_token=${accessToken}`);
 
-            newReportId = res.body.data.reports[0]._id;
             res.should.have.status(200);
+            res.body.data.reports.should.be.a('array').of.length(2);
+            newReportId = res.body.data.reports[0]._id;
+
             done();
         });
 
         it('should update report', async (done) => {
-            // create a second report
+            // update the second report
             await agent.put('/reports')
                 .set('x-xsrf-token', JSON.stringify(xsrfToken))
                 .set('Cookie', `access_token=${accessToken}`)
-                .send(newReportId, { customerName: 'test name updated' });
+                .send({ reportId: newReportId, customerName: 'test name updated' });
 
             const res = await agent.get('/reports')
                 .set('x-xsrf-token', JSON.stringify(xsrfToken))
                 .set('Cookie', `access_token=${accessToken}`);
 
             res.should.have.status(200);
+            done();
+        });
+
+        it('should delete report', async (done) => {
+            // delete the second report
+            await agent.delete(`/reports/${newReportId}`)
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`);
+
+            const res = await agent.get('/reports')
+                .set('x-xsrf-token', JSON.stringify(xsrfToken))
+                .set('Cookie', `access_token=${accessToken}`);
+
+            res.should.have.status(200);
+            res.body.data.reports.should.be.a('array').of.length(1);
             done();
         });
     });

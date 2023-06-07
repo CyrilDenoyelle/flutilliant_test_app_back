@@ -9,6 +9,7 @@ const {
     create,
     findAll,
     update,
+    delete: deleteReport,
 } = require('../controllers/reportController');
 
 router.use(userAuth);
@@ -22,5 +23,9 @@ router.route('/').get(errorHandler(findAll));
 // update a report for logged user
 // (director will be able to update any reports, user only his own reports)
 router.route('/').put(errorHandler(update));
+
+// delete a report for logged user
+// (director will be able to delet any reports, user only his own reports)
+router.route('/:id').delete(errorHandler(deleteReport));
 
 module.exports = router;

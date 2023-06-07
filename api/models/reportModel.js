@@ -46,10 +46,31 @@ const reportSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     collection: 'reports',
 }, {
     timestamps: true,
+});
+
+[
+    'count',
+    'find',
+    'findOne',
+    'findOneAndDelete',
+    'findOneAndRemove',
+    'findOneAndUpdate',
+    'update',
+    'updateOne',
+    'updateMany',
+].forEach((type) => {
+    reportSchema.pre(type, function excludeIsDeleted(next) {
+        this.where({ isDeleted: false });
+        next();
+    });
 });
 
 module.exports = mongoose.model('Report', reportSchema);
